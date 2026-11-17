@@ -10,7 +10,7 @@
 
 ## Phiên bản được đánh giá
 
-Đánh giá ngày 2026-11-17 trên nhánh `thanh-ledger-evaluation`, sau khi merge đủ code ba thành viên. Hash trên là commit nguồn có đủ bốn shape, không phải một commit tương lai hoặc hash của bản tài liệu chưa commit. Thay đổi phiên này chỉ mở rộng test và cập nhật bằng chứng/tài liệu, không sửa shape, host, config hoặc data. Sau khi commit phần hoàn thiện, ghi hash đó vào thông tin bàn giao/TEAM nếu cần; không nhầm với mốc nguồn benchmark.
+Đánh giá ngày 2026-11-17 trên nhánh `thanh-ledger-evaluation` tại mốc nguồn `4f2060d`, sau khi merge đủ code ba thành viên. Nhánh này đã vào `main` qua PR #3 (`2a8fa53`). Từ `4f2060d` đến `2a8fa53` chỉ đổi test và tài liệu, không đổi shape, host, config, data, `benchmark.json` hay `crash.json`. Trên `main`, chạy lại benchmark và crash cho cùng pass rate, pass^5, seed min–max, variance và `20/20`; cost chỉ lệch ở chữ số thứ 12 do cộng số thực.
 
 ## Vì sao shape này
 

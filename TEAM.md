@@ -5,7 +5,7 @@
 - Tên nhóm: Dota
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY08-Dota-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents · nhánh `main` · commit chốt: _(điền cuối)_
+- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents · nhánh `main` · commit chốt: Nộp bài day08_nhóm
 
 ## Thành viên
 
@@ -30,7 +30,7 @@ Gợi ý chia vai:
 | Phùng Quang Trà | workflow (A) + integration | `f0fb63f` | `src/tests/test_workflow_shape.py` (22 test) |
 | Vũ Nam Khánh | single agent (B) | `13f5978` | Ma trận student Single Agent (62 test: T01–T14, retry, crash) |
 | Nguyễn Tuấn Anh | orchestrator (C) + handoff | `2346e37` | `src/tests/test_orchestrator_shape.py` (23 test) |
-| Phạm Duy Thành | ledger/crash + evaluation | `175d770` (giai đoạn 1–2); `db22c3b` (single/evaluation); phần hoàn thiện sau `4f2060d` chưa commit | `src/tests/test_team_crash_recovery.py` (24 test đủ ba shape), `src/tests/test_research_draft_ablation.py` (72 test) |
+| Phạm Duy Thành | ledger/crash + evaluation | `175d770` (giai đoạn 1–2); `db22c3b` (single/evaluation); `9daa602` (hoàn thiện evaluation, ADR) | `src/tests/test_team_crash_recovery.py` (24 test đủ ba shape), `src/tests/test_research_draft_ablation.py` (72 test) |
 
 ## Cá nhân
 
@@ -71,6 +71,13 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 | Lần | Ngày | Merge vào `main` | Cổng host `pytest -q` | Ma trận student | `check_submission` |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 2026-11-17 | `Phungtr-04094` → `main`, fast-forward tới `f0fb63f`, không conflict | 76 passed | 124 passed / 124 failed (workflow 62/62, swarm 62/62; 124 fail là của `single`, `orchestrator` chưa merge) | 12 FAIL (2 shape chưa có; chưa có benchmark, crash, ADR, research card) |
+| 2 | 2026-11-17 | PR #1 `khanhvnm-04112` (`9571721`), PR #2 `nta` (`21cd806`), PR #3 `thanh-ledger-evaluation` (`2a8fa53`). Conflict TEAM/benchmark đã được Thành giải trên nhánh của mình tại `4f2060d` trước khi mở PR | 195 passed | 248 passed, 0 failed | 0 FAIL, 0 WARN |
+
+Kiểm tra tái tạo sau lần 2 (trên `main` tại `2a8fa53`, chạy lại vào thư mục tạm, không ghi đè `src/reports/`):
+
+- `lab8.benchmark` 4 shape × 14 claim × 5 seed: pass rate, pass^5, seed min–max, variance trùng khớp với `src/reports/benchmark.json`; cost chỉ lệch ở chữ số thứ 12 trở đi do cộng số thực (ví dụ workflow 28.862857142857138 → 28.862857142857145), không ảnh hưởng số 6 chữ số trong ADR.
+- `lab8.crash_test --count 20`: `20/20`, trùng khớp `src/reports/crash.json`.
+- `git diff 4f2060d 2a8fa53` không đổi `src/lab8/shapes/`, `src/reports/benchmark.json`, `src/reports/crash.json`.
 
 
 ## Thành viên 2 — 2A202604112_VuNamKhanh
@@ -144,7 +151,7 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 - Thêm helper ablation `workflow_no_draft` và 72 test về kết quả nghiệp vụ, accounting, trace và khôi phục patch. Helper dùng cho research card bắt buộc, không đăng ký bonus.
 - Tạo baseline 280 trial bằng benchmark chính thức, crash report 20/20 và ablation 140 trial; điền research card R4 cùng phần kết quả ban đầu của báo cáo nhóm.
 - Sau merge `1f7d89d`: mở rộng tám kịch bản recovery/approval sang single thành 16 test; cập nhật này đã commit tại `db22c3b`.
-- Sau merge orchestrator tại `4f2060d`: mở rộng thành 24 test dùng chung cho đủ workflow/single/orchestrator, tạo lại benchmark/crash, hoàn thiện ADR chọn workflow và cập nhật báo cáo theo đủ bốn shape. Phần hoàn thiện mới chưa commit.
+- Sau merge orchestrator tại `4f2060d`: mở rộng thành 24 test dùng chung cho đủ workflow/single/orchestrator, tạo lại benchmark/crash, hoàn thiện ADR chọn workflow và cập nhật báo cáo theo đủ bốn shape. Phần hoàn thiện đã commit tại `9daa602` và merge vào `main` qua PR #3 (`2a8fa53`).
 - Không sửa code shape của thành viên khác hoặc thước đo của lab. Chưa có kết quả hidden, không suy ra đạt ngưỡng hidden từ public.
 - Code và tài liệu giai đoạn này được soạn với trợ lý Codex theo yêu cầu; thành viên cần tự đọc, chạy lại và bổ sung tự đánh giá trước khi nộp.
 
@@ -156,4 +163,4 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 - `src/reports/crash.json`: 20/20. Đây là crash suite host/swarm; 24 test riêng bổ sung bằng chứng cho ba shape nhóm viết.
 - `src/reports/research_ablation.json`: mỗi variant 70/70 pass; cost/success 28.862857 → 27.857143 VND mô phỏng.
 - Báo cáo cá nhân: [report/team/2A202604075_PhamDuyThanh.md](report/team/2A202604075_PhamDuyThanh.md).
-- Commit kỹ thuật: `175d770` và `db22c3b`; `4f2060d` là merge commit có đủ code nguồn được đánh giá. Hash nguồn trong ADR là `4f2060dc4729fa13d235ef41d4ed88480331b4f8`; phần hoàn thiện test/tài liệu sau đó chưa commit, chưa khai đã push/merge bản nộp.
+- Commit kỹ thuật: `175d770`, `db22c3b` và `9daa602`; `4f2060d` là merge commit có đủ code nguồn được đánh giá. Phần hoàn thiện test/tài liệu (`9daa602`) đã merge vào `main` qua PR #3 (`2a8fa53`).

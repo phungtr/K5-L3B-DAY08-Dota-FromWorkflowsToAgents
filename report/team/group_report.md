@@ -4,8 +4,8 @@
 
 - Nhóm: Dota, lớp L3B.
 - Thành viên và phân công: xem `TEAM.md`.
-- Phiên bản nguồn được đánh giá: `4f2060dc4729fa13d235ef41d4ed88480331b4f8`, trùng mốc nguồn trong ADR; đã merge workflow, single và orchestrator.
-- Nhánh đánh giá: `thanh-ledger-evaluation`. Test mở rộng và báo cáo hoàn thiện của phiên này chưa commit; đây không phải tuyên bố đã push bản nộp lên main.
+- Phiên bản nguồn được đánh giá: `4f2060dc4729fa13d235ef41d4ed88480331b4f8`, có đủ workflow, single và orchestrator. Commit nộp bài ghi ở dòng `Commit hash` của ADR.
+- Nhánh nộp: `main`. Ba nhánh thành viên đã merge vào `main` qua PR #1 (single), PR #2 (orchestrator), PR #3 (evaluation, `2a8fa53`). Từ `4f2060d` đến `2a8fa53` không đổi code shape, `benchmark.json` hay `crash.json`.
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -42,7 +42,7 @@ Bộ mặc định **195 passed**, student **248 passed**. Crash suite chính đ
 
 Quyết định ADR: **workflow**, vì mức tự chủ thấp nhất, cùng chất lượng public với single/orchestrator và cost/success thấp hơn. Chỉ xem lại nếu dữ liệu có nhãn mới chứng minh lợi ích của kiến trúc khác đủ bù chi phí, vẫn qua các cổng an toàn. Xem `report/team/decision_adr.md`.
 
-Kiểm tra nộp bài đạt **0 FAIL, 1 WARN**; cảnh báo do phần hoàn thiện test/tài liệu mới chưa commit. Cần commit và tích hợp nhánh của Thành vào main trước bàn giao, không coi checker xanh là bằng chứng đã push hoặc đạt hidden.
+Trên `main` sau khi merge đủ ba nhánh (`2a8fa53`), `check_submission` đạt **0 FAIL, 0 WARN**. Trà chạy lại benchmark và crash vào thư mục tạm để kiểm tái tạo: pass rate, pass^5, seed min–max, variance trùng khớp file đã commit; cost chỉ lệch ở chữ số thứ 12 do cộng số thực; crash `20/20` trùng khớp. Checker xanh không có nghĩa là đạt ngưỡng hidden.
 
 Research ablation R4: bật/tắt duy nhất draft của workflow, 70/70 trial pass mỗi variant, cost/success 28.862857 → 27.857143; tổng giảm 70.40 VND mô phỏng (3.48%). Cùng tools, corpus, seeds và evaluator. Kết quả tại `src/reports/research_ablation.json`, được giữ từ commit `175d770` vì workflow/helper không đổi. Thí nghiệm không đo chất lượng văn bản và không cô lập topology; xem research card.
 
@@ -50,13 +50,13 @@ Research ablation R4: bật/tắt duy nhất draft của workflow, 70/70 trial p
 
 Môi trường của Thành ban đầu dùng Python 3.15: smoke báo thiếu PyYAML, pytest báo thiếu module, cài PyYAML thất bại với lỗi cần Microsoft Visual C++ 14.0. Tạo lại .venv bằng Python 3.11.9 và cài requirements đã xử lý lỗi, không thay constraints hoặc host.
 
-Hai lần tích hợp phát sinh khác biệt giữa benchmark chưa đủ shape và benchmark mới. Merge orchestrator xung đột TEAM/benchmark: giữ đóng góp cả Thành/Tuấn Anh trong TEAM, tạo lại JSON bằng benchmark chính thức thay vì chọn số liệu hoặc sửa tay. Merge đã được lưu tại `4f2060d`.
+Hai lần tích hợp phát sinh khác biệt giữa benchmark chưa đủ shape và benchmark mới. Merge orchestrator xung đột TEAM/benchmark: giữ đóng góp cả Thành/Tuấn Anh trong TEAM, tạo lại JSON bằng benchmark chính thức thay vì chọn số liệu hoặc sửa tay. Merge đã được lưu tại `4f2060d`. Để tránh xung đột lặp lại, mỗi thành viên làm trên nhánh riêng tạo từ `main` và vào `main` qua pull request; Trà merge lần lượt PR #1–#3 và chạy lại cổng host, ma trận student, `check_submission` sau lần merge cuối.
 
 Tên paper R4 trong mẫu chưa xác minh được; research card ghi rõ nguồn thay thế đã đọc là *AI Agents That Matter* (2024), không gán nội dung cho paper EMNLP 2026 chưa xác minh. Nếu lớp bắt buộc đúng paper trong slide thì cần đối chiếu với coach; không bịa nguồn.
 
 ## 6. Tổng hợp đóng góp
 
-Trà: workflow và 22 test bổ sung (`f0fb63f`). Khánh: single (`13f5978`) và báo cáo cá nhân. Tuấn Anh: orchestrator, handoff và 23 test bổ sung (`2346e37`). Thành: test recovery, helper/72 test ablation, báo cáo benchmark/crash, ADR và research card (`175d770`, `db22c3b`; phần mở rộng orchestrator/tài liệu cuối đang chưa commit).
+Trà: workflow và 22 test bổ sung (`f0fb63f`); integration (merge PR #1–#3, kiểm tái tạo benchmark/crash). Khánh: single (`13f5978`) và báo cáo cá nhân. Tuấn Anh: orchestrator, handoff và 23 test bổ sung (`2346e37`). Thành: test recovery, helper/72 test ablation, báo cáo benchmark/crash, ADR và research card (`175d770`, `db22c3b`, `9daa602`).
 
 Bảng đóng góp, lịch sử checkpoint và báo cáo cá nhân nằm trong TEAM và `report/team/`. Mỗi thành viên tự xác nhận đóng góp, việc sử dụng AI và hiểu kết quả trước khi nộp; không khai commit của người khác thành commit của mình.
 

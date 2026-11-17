@@ -16,7 +16,7 @@
 Các nhánh đã merge vào `main`:
 
 - Lần 1 (2026-11-17): `Phungtr-04094` (shape workflow + test), fast-forward tới `f0fb63f`, không conflict.
-
+- Lần 2 (2026-11-17): merge pull request PR #1 `khanhvnm-04112` (single, `9571721`), PR #2 `nta` (orchestrator, `21cd806`), PR #3 `thanh-ledger-evaluation` (evaluation, `2a8fa53`). Không conflict khi merge PR; conflict TEAM/benchmark đã được Thành giải trên nhánh của mình tại `4f2060d`.
 
 ## 3. Đóng góp cụ thể
 
@@ -67,10 +67,18 @@ Chạy trong `src/`, tại commit `f0fb63f`:
 - `python -m pytest -q -m student -o addopts=` → `124 failed, 124 passed`. 124 passed là workflow 62 + swarm 62; 124 failed là `single` và `orchestrator`, lúc này còn là stub.
 - `python -m lab8.check_submission` → `12 FAIL`: 2 shape chưa có; chưa có `reports/benchmark.json`, `reports/crash.json`; ADR và research card chưa điền.
 
+**Integration lần 2** (trên `main` tại `2a8fa53`, sau khi merge PR #1–#3):
+
+- `python -m pytest -q` → `195 passed`.
+- `python -m pytest -q -m student -o addopts=` → `248 passed` (cả 4 shape; ma trận chấp nhận lỗi tham chiếu swarm C-002 seed 55).
+- `python -m lab8.check_submission` → `0 FAIL, 0 WARN`: 3 shape OK 12/12, benchmark 4 shape × 14 claim × 5 seed, crash 20/20, ADR chọn workflow, research card đủ, bảng đóng góp 4 người.
+- Kiểm tái tạo (C7): chạy lại `lab8.benchmark` và `lab8.crash_test` vào thư mục tạm, không ghi đè `src/reports/`. Pass rate, pass^5, seed min–max, variance trùng khớp `benchmark.json`; cost chỉ lệch ở chữ số thứ 12 do cộng số thực; crash `20/20` trùng khớp `crash.json`.
+- `git diff 4f2060d 2a8fa53`: không đổi code shape, `benchmark.json`, `crash.json`, nên hash nguồn trong ADR vẫn khớp số liệu.
+
 
 ## 5. Công cụ AI đã dùng
 
-- **Claude Code (VS Code):** đọc repo để tóm tắt việc cần làm, giải thích contract và host; gợi ý code `workflow.py` và viết `test_workflow_shape.py`; tạo khung `TEAM.md` và báo cáo này.
+- **Claude Code (VS Code):** đọc repo để tóm tắt việc cần làm, giải thích contract và host; gợi ý code `workflow.py` và viết `test_workflow_shape.py`; tạo khung `TEAM.md` và báo cáo này; hỗ trợ integration (chạy cổng host, ma trận student, `check_submission`, chạy lại benchmark/crash để so với file đã commit, cập nhật nhật ký integration).
 - **Cách tự kiểm tra:**
   - Đối chiếu từng bước trong `workflow.py` với docstring đầu file, `docs/business_rules.md` và `docs/contracts.md`.
   - Chạy ma trận student của workflow (62 passed), cổng host (76 passed) và `check_submission` (mục shapes OK).
@@ -80,4 +88,4 @@ Chạy trong `src/`, tại commit `f0fb63f`:
 
 ## 6. Tự đánh giá
 
-Điểm mình làm tốt là giữ ranh giới rõ giữa code và model: tiền và trạng thái do Python quyết từ dữ liệu DB, model chỉ soạn chữ. Có test chứng minh ticket chứa injection không làm thay đổi được số tiền. Điểm chưa tốt là phần integration làm khá muộn, và một phần code được Claude Code gợi ý nên mình phải đọc lại kỹ mới hiểu hết. Bài học rút ra là với hệ thống có tiền, câu hỏi đầu tiên nên là "cái gì không được để model quyết". Nếu làm lại, mình sẽ viết test theo contract trước rồi mới code, và merge integration sớm hơn.
+Điểm mình làm tốt là giữ ranh giới rõ giữa code và model trong shape `workflow`: tiền và trạng thái do Python quyết từ dữ liệu DB, model chỉ soạn chữ, và có test chứng minh điều đó. Ở vai trò nhóm trưởng, mình làm integration theo hai lần. Mình dùng `check_submission` để theo dõi phần còn thiếu, từ 12 FAIL xuống 0 FAIL, rồi chạy lại benchmark và crash test để chắc số liệu trong file khớp với code. Điểm chưa tốt là cả ba PR đều dồn về cùng một ngày nên thời gian dự phòng ít, và một phần code được Claude Code gợi ý nên mình phải đọc lại kỹ mới hiểu hết. Nếu làm lại, mình sẽ viết test theo contract trước rồi mới code, và yêu cầu các bạn merge từng phần nhỏ sớm hơn.
