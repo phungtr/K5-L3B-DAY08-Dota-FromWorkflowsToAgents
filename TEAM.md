@@ -5,7 +5,7 @@
 - Tên nhóm: Dota
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY08-Dota-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents · nhánh `main` · commit chốt: Nộp bài day08_nhóm
+- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents · nhánh `main` · commit chốt: [`4f2060d`](https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents/commit/4f2060dc4729fa13d235ef41d4ed88480331b4f8) (trùng `Commit hash` trong `report/team/decision_adr.md`)
 
 ## Thành viên
 
